@@ -1,0 +1,14 @@
+- name: ping
+  hosts: '@@HOSTS@@'
+  vars:
+    insights_signature_exclude: /hosts,/vars/insights_signature
+    insights_signature: !!binary |
+      T0tRVEpvU0hxM3pQMFpWYWU2bFF4SHJwYi9Dc0ltUThCQlR4VmVJajlHTi9jdXRhVDdsdGlNa1g3
+      elhnelAyUHF0RkE0d1FrVVZzY1d4VXlZVUdGVjFJY2tmczhTemRDb21MdDVIeXpkYmpVQVVWV3Jl
+      VXovOUR6eDFwMkQvclFsVDZyT1oyRmdGdWQ1dlBsOW0vaHRueEI1cXlSQVo4bUQrSjZBVlFhTEVx
+      RGNqRlJVRU1YdVNIeWhkaUo5SVRjbUZPS0Q0bzJQV2dsYkJZTVNzQVZDZmNkNGtVNGpweXJSbEVy
+      SGFIR1dBMzBacUxoZ1gyNkswTC9mYmphTUZWTlNaUnIvUy9qL3ZZZWY2VkJWcmxNK2FwV0Q2MERW
+      TzFjZkVJZ3dKVVVkK1lTWGFNVW1IM3Y4UU9MU2QyZUVMalZ6dHJmbkNqVXBQNWdUUElpb0xwbjN3
+      PT0=
+  tasks:
+    - ping: null
