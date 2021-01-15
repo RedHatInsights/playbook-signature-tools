@@ -6,11 +6,18 @@ import base64
 import copy
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.exceptions import InvalidSignature
 
 SIGKEY = 'insights_signature'
 DEFAULT_EXCLUSION = '/hosts,/vars'
 EXCLUDABLE_VARIABLES = ['hosts', 'vars']
 VALID_OPERATIONS = ['-sign', '-validate']
+
+# Template Dumper class:  Allows for correct YAML indentation
+class TemplateDumper(yaml.Dumper):
+    def increase_indent(self, flow=False, indentless=False):
+        return super(TemplateDumper, self).increase_indent(flow, False)
+
 
 # Function that creates and returns the signature based off of a given private key and filtered yaml.  At the moment the
 # private key is stored locally in the repo, however this is bound to change later.
@@ -52,9 +59,9 @@ def excludeDynamicElements(unsignedSnippet):
         # remove empty strings
         element = [string for string in element if string != '']
 
-        if (len(element) is 1 and element[0] in EXCLUDABLE_VARIABLES):
+        if (len(element) == 1 and element[0] in EXCLUDABLE_VARIABLES):
             del unsignedSnippet[element[0]]
-        elif (len(element) is 2 and element[0] in EXCLUDABLE_VARIABLES):
+        elif (len(element) == 2 and element[0] in EXCLUDABLE_VARIABLES):
             try:
                 del unsignedSnippet[element[0]][element[1]]
             except:
@@ -68,7 +75,6 @@ def excludeDynamicElements(unsignedSnippet):
 # Function that takes in unsigned snippet yaml, removes dynamic elements, and adds signature to yaml
 #   output: signed snippet
 def signPlaybookSnippet(unsignedSnippet, privateKeyPath):
-    print(unsignedSnippet)
     if ('vars' not in unsignedSnippet):
         unsignedSnippet['vars'] = {'insights_signature_exclude': DEFAULT_EXCLUSION}
 
@@ -92,11 +98,11 @@ def sign(templatePath, privateKeyPath):
 
     with(open(templatePath, 'w')) as output:
         yaml.dump(
-            signedSnippet,
+            [signedSnippet],
             output,
-            sort_keys=False,
-            indent=2,
+            Dumper=TemplateDumper,
             width=100,
+            sort_keys=False,
             default_flow_style=False
         )
 
@@ -146,13 +152,13 @@ def verify(templatePath, publicKeyPath):
         for signedSnippet in yml:
             if (SIGKEY not in signedSnippet['vars']):
                 raise Exception('MISSING SIGNATURE: Playbook must first be signed before it is validated.')
+            
+            try:
+                verifyPlaybookSnippet(signedSnippet, publicKeyPath)
 
-            validation = verifyPlaybookSnippet(signedSnippet, publicKeyPath)
-
-            if (validation is not Exception):
-                print("Validation was Successful!")
-            else:
-                print("Signature could not be verified")
+                print(f"Validation was Successful for template [name: { signedSnippet['name'] }]")
+            except(InvalidSignature):
+                print(f"Signature could not be verified for template [name: { signedSnippet['name'] }]")
 
 
 def main():
