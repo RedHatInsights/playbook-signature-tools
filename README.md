@@ -25,10 +25,10 @@ Once your virtual environment is up and running you are able to run the signatur
 ## Signing
 
 Currently the script is able to sign one template at a time, this operation will take the template referenced in the [PATH to Template] and
-sign it using the private key given in the [PATH to Private Key].
+sign it using the private key generated and stored in the [.gnupg] folder.
 
 ```
-python tools.py -sign [PATH to Template] [PATH to Private Key]
+python tools.py -sign [PATH to Template]
 ```
 
 ## Validation
@@ -38,5 +38,5 @@ Unlike the signing tool, this operation is able to validate one or more template
 * Each template has been signed by the same private key.
 
 ```
-python tools.py -validate [PATH to Template file] [PATH to Public Key]
+python tools.py -validate [PATH to Template file]
 ```
