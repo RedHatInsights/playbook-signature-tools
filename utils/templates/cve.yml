@@ -4,12 +4,12 @@
     insights_issues: '@@ISSUES@@'
     insights_signature_exclude: /hosts,/vars/insights_issues,/vars/insights_signature
     insights_signature: !!binary |
-      SFQ0R2YrR2YzM05sNnFpbmptWWtGcXNnNVEvbitZYWgzZXYvTHpHb1dNS3lHR2J2NkFKb0NveFkx
-      K2RvM0VaSW42Skl5Z1RxaTlzR0JqeFJrcG41eFZnMkJ6QWdEdm1NS29vVXRGL1h3ZFl5ZTRlemxE
-      d2psWENmNktLWHhiaGx1ZVZrdjVCYXVJMnBmWXNEYXZuMTZidzNWZXMwcXF6TkQzQXUzaWtBNm9G
-      bHNIamlJNjhFMUFyUExaeVpxZUx4cFJMRnRFWXVnUjBySmUzK0x5Y0c1cGQ4dmNLa25tM2hwODln
-      RklXSmtab25kYkh4RDRVRW80cFB3YUxIaHVRRng5Z0M2blFrSmZxMUMzeUxIc1NXekpLME5KaEhh
-      djlsVERwMFlySmxWVnN1MnhhVjlBY2huR25rMWZ5bDFRUEpad3Q3ZkFLeTVhUFJxTS9sUmloTENB
+      ZnNReHdHaFNaZ0lqZ2pMd0MyQWs2UHpIMVZEd2hsdlFiL1ZQdkNPUGowMHBmbUhIZzRRS1lMTUdu
+      NHU4cTRyVTdBQ042ekhabm9sYzhFSW1udVFOa3dZWU0rN0hhVGhIbFYwTlgwRHJERWxaWWI0ekZK
+      M3hjTDVGc1FLSk8vcVVLc0JpcWRUazFaT0xZeUprQVRwRGhKdW5JaURNOEo3WXFIOVJxa3ErWVRl
+      eXY1eWZKVU56MlhCM1kzb0JBejhHSmdyZ0NDSXZKYzBmSnU0ZWJHUXNtOU9zN2NUdmk1ZHhVd3Br
+      UjI4T2lyYWVhcm1tSXhDUWtFYktuNVpoTjBJT2hsNytHWkVyVkZKcTB6cHdDMzRSdEw4RkJORXV3
+      UVhnOFdOTDAxb1c2ZG8rWUxNVFJLcjA4b3pOaGNOQjVTT3RMWW4rQzhTdWdwVVVyMEljaVJUNkRB
       PT0=
   become: true
   tasks:

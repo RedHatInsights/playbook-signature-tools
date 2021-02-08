@@ -1,0 +1,23 @@
+- name: run insights
+  hosts: host1,host2
+  become: true
+  gather_facts: false
+  vars:
+    insights_signature_exclude: /hosts,/vars/insights_signature
+    insights_signature: !!binary |
+      TFMwdExTMUNSVWRKVGlCUVIxQWdVMGxIVGtGVVZWSkZMUzB0TFMwS0NtbFJSWHBDUVVGQ1EwRkJa
+      RVpwUlVWQmMzVTJTbWsxYkhoUlpqTlRkVTgyT1U0ek1WWXdZMUU1U1RCR1FXMUJhRmxRT0VGRFoy
+      dFJPVTR6TVZZd1kxRUtPVWt4Y2xOUlowRndTWGcxVlhSRGJqRkNkRTR6T0hOM1l6QTFTRWRHYVVK
+      UlUySnpUMk5LWjI1c2NYSlpPR2hsYVVZMVpsVmpSbTV2YUM5eVdIRkJXUXBEZFVoSE1VUTFkRzFU
+      VTBsS2NHSnNTSFExT0c5NVoyNUhSbFZCWTFOMmJVZ3ZOMFpsWkVsR1FUbHlNV1JUTlV3MVJsVTVT
+      bmwyUmxSMVVpdERlV0pwQ25KbFdIcFJiMWhtZW1ZNU5tOTBhV1ZvYmpsTFJHSnFNemxxUjB0b1lV
+      NHhUMVZsU1dwR2RWSlZLemMzVTJnMVNVTk5Wa2RpZFUxSlIweHphMFExWjBFS05YWXplRzFqYUhK
+      RFkwUnRjMWx6YVVGVVNtWkpieXQ1WTNGSVZqaDFVbHBtZVVWd1JGWTFSV28xYm5GdllrWjJjRGRN
+      Tm1wVlRuSnVZM2hyYUhvelNBcFFUVGgwYW5oVlozSXhhazFDY1RJclFrWjJhbXBLU2taSU5EUlpO
+      R2h4YnpWYU5WRm1UREJRVm1KalZHOVhSR2hLYWtRemFtdDJNVmR1TTJoUVR6WmpDbXhhUW1WdVNX
+      cGhlbkJuVlVoMFoyZEZSM2xEUmxWaloxUmhiR3RJZHowOUNqMWFhV2hKQ2kwdExTMHRSVTVFSUZC
+      SFVDQlRTVWRPUVZSVlVrVXRMUzB0TFFvPQ==
+  tasks:
+    - name: run insights
+      command: insights-client
+      changed_when: false
