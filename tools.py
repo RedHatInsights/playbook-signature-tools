@@ -1,7 +1,7 @@
 import os
 import sys
 import pickle
-import yaml
+import oyaml as yaml
 import base64
 import copy
 import gnupg
@@ -28,8 +28,10 @@ def createSignature(unsignedSnippet):
     private key is stored locally in the repo, however this is bound to change later.
       output: signature (base64)
     """
-    serializedSnippet = pickle.dumps(unsignedSnippet)
-    signature = bytes(str(gpg.sign(serializedSnippet, detach=True, passphrase='something')), "UTF-8")
+    serializedSnippet = yaml.dump(unsignedSnippet)
+
+    signature = gpg.sign(serializedSnippet, detach=True, passphrase='something')
+    signature = bytes(str(signature).encode("UTF-8"))
 
     return base64.b64encode(signature)
 
@@ -106,7 +108,7 @@ def executeValidation(signedSnippet, encodedSignature):
     """
     Function that checks signature againsed stringified filtered snippet
     """
-    serializedSnippet = pickle.dumps(signedSnippet)
+    serializedSnippet = bytes(yaml.dump(signedSnippet).encode("UTF-8"))
     decodedSignature = base64.b64decode(encodedSignature)
 
     fd, fn = tempfile.mkstemp()
