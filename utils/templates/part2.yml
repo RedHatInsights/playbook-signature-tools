@@ -1,0 +1,40 @@
+- name: Reboot system (if applicable)
+  hosts: newpreview,team-jupyter-server
+  become: true
+  gather_facts: false
+  vars:
+    insights_signature_exclude: /hosts,/vars
+    insights_signature: !!binary |
+      TFMwdExTMUNSVWRKVGlCUVIxQWdVMGxIVGtGVVZWSkZMUzB0TFMwS0NtbFJSWHBDUVVGQ1EwRkJa
+      RVpwUlVWQmMzVTJTbWsxYkhoUlpqTlRkVTgyT1U0ek1WWXdZMUU1U1RCR1FXMUNRUzlVT0VGRFoy
+      dFJPVTR6TVZZd1kxRUtPVWt4UTJoblpqaERRakEwT1hsVWEzcEVMM1oxZHpWNVJVWk9VSEphZHpS
+      UU1GWkhNRWhTVURWUU1uUkZLMWRCUjBzNGVXcFlkVzV1V0VsaVlXTjBNQXB3WmxGcVkybGxaR3d5
+      WmpVMFMxbFZVRVUzYzJVeE1qazJUamRKTDJZdmFEQkxNM1ZMZFhweFdFbFFhVVpsUjFRM2VWSkZS
+      VGhOYjB4TlNVOVRSMEpVQ2swellrUnRXbGRhWmtkTkwzWXZObmd4U0ZOaE1UTm5ORmxpY1c5cE5U
+      WTViSElyVVhaWGVGTnBSMWhYUTI5WlltZHJTRlJXTXpkQlFWUndPR3hzUVc4S1IxYzRWV0U0ZVdk
+      VU1ERnJXa1JGWkZWTWIwaDJZVWhEUWxOUmNrUmpaR0ZNYTFKSlQwVkViQzgyVUd0b1QxTTVSa3RZ
+      U2xZck4wMWFTRVpOWTJoeVdRcFpaVWxGT0cxd2J6SklSakkyUkZNd2NHMU1TVTgzTUdSSGRrRmFa
+      VElyY1d4eGRrRldjRGR0ZUVGTWJIWkxRa2RvY1U0MGQyTktVV1ZIYTNvdmIzUk9DazV5YW1oVFRE
+      aG5OVVk0Yms1R2VHeEZNVGRaTWpOallrODViWFpvUVQwOUNqMHdSelJFQ2kwdExTMHRSVTVFSUZC
+      SFVDQlRTVWRPUVZSVlVrVXRMUzB0TFFvPQ==
+  tasks:
+    - when:
+        - insights_needs_reboot is defined
+        - insights_needs_reboot
+      block:
+        - name: Reboot system
+          shell: sleep 2 && shutdown -r now "Ansible triggered reboot"
+          async: 1
+          poll: 0
+          ignore_errors: true
+        - name: Wait for system to boot up
+          local_action:
+            module: wait_for
+            host: '{{ hostvars[inventory_hostname][''ansible_host''] | default(hostvars[inventory_hostname][''ansible_ssh_host''],
+              true) | default(inventory_hostname, true) }}'
+            port: '{{ hostvars[inventory_hostname][''ansible_port''] | default(hostvars[inventory_hostname][''ansible_ssh_port''],
+              true) | default(''22'', true) }}'
+            delay: 15
+            search_regex: OpenSSH
+            timeout: 300
+          become: false
