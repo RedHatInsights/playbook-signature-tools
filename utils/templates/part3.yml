@@ -1,0 +1,23 @@
+- name: run insights
+  hosts: newpreview,team-jupyter-server
+  vars:
+    insights_signature_exclude: /hosts,/vars/insights_signature
+    insights_signature: !!binary |
+      TFMwdExTMUNSVWRKVGlCUVIxQWdVMGxIVGtGVVZWSkZMUzB0TFMwS0NtbFJSWHBDUVVGQ1EwRkJa
+      RVpwUlVWQmMzVTJTbWsxYkhoUlpqTlRkVTgyT1U0ek1WWXdZMUU1U1RCR1FXMUJlblYzZDBGRFoy
+      dFJPVTR6TVZZd1kxRUtPVWt6ZFhaQlppdE5PVFpCUkRScU1tRndkMHBvY2pGeGVHZGFjRkZKVEc5
+      cFNFOVlTRFY2YVV4bVdISktiR2RzUm5oU1ZESktRVWgzTDNWaVNURlhVUW81WmxJM1NUWjZaelpw
+      VkdGQlpuZDFWM0J1VDNJNWVIWkhXVEF6WTBKR1dtZHliMUZYTWtOeFdsZE1abXRoUzFkclNGRkpX
+      RGh0UWpSaFFuQjVTMkpDQ2pGQlJuRnFPRUU1TXpneVoxQXhRWE15TWtsdlJpdFZTSHBCYmpJM2Ns
+      TkRhSGQ1YXpCUGVtZHhiMWxMTm5ocVpESjJUV3BsUVN0T1N6WlBSRUl5TjFJS04zcG1UVmhOYWtS
+      a1N6ZE9SMDF6UldSTWRXaEtaVlp5VldaUFNpdElSa3BVY25oMkwxUjVkRkZLYVhOSlRHTjBaMHc1
+      WmxGR2FWcHBjbmQyVmxkaFJRcHRZbkF4TUVkdVVFcHNOR2RhYTFkNVltbEJlbFl6WmpOWFIzcEpR
+      MnhQVERKNWNVWllPR3BPTVhaeVdWVTJiak56VFRBM1NETTFhMkpzT1VOdk4xcERDakEyU25oeE5E
+      TklRWEpxZWs4NWVYaG5RMnBRVlRGMlMzWnJUbHBhWnowOUNqMHhabkpGQ2kwdExTMHRSVTVFSUZC
+      SFVDQlRTVWRPUVZSVlVrVXRMUzB0TFFvPQ==
+  become: true
+  gather_facts: false
+  tasks:
+    - name: run insights
+      command: insights-client
+      changed_when: false

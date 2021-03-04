@@ -72,6 +72,7 @@ def signPlaybookSnippet(unsignedSnippet):
     """
     if ('vars' not in unsignedSnippet):
         unsignedSnippet['vars'] = {'insights_signature_exclude': DEFAULT_EXCLUSION}
+        unsignedSnippet['tasks'] = unsignedSnippet.pop('tasks') # order playbook such that tasks is the last element.
 
     unsignedSnippetCopy = copy.deepcopy(unsignedSnippet)
 
@@ -108,7 +109,7 @@ def executeValidation(signedSnippet, encodedSignature):
     """
     Function that checks signature againsed stringified filtered snippet
     """
-    serializedSnippet = bytes(yaml.dump(signedSnippet).encode("UTF-8"))
+    serializedSnippet = bytes(yaml.dump(signedSnippet, default_flow_style=False).encode("UTF-8"))
     decodedSignature = base64.b64decode(encodedSignature)
 
     fd, fn = tempfile.mkstemp()
