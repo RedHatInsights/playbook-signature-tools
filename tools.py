@@ -6,6 +6,7 @@ import base64
 import copy
 import gnupg
 import tempfile
+import hashlib
 
 SIGKEY = 'insights_signature'
 DEFAULT_EXCLUSION = '/hosts,/vars'
@@ -22,15 +23,27 @@ class TemplateDumper(yaml.Dumper):
         return super(TemplateDumper, self).increase_indent(flow, False)
 
 
+def createSnippetHash(snippet):
+    """
+    Function that creates and returns a hash of the snippet given to the function.
+        output: snippetHash (bytes)
+    """
+    snippetHash = hashlib.sha256()
+    serializedSnippet = bytes(yaml.dump(snippet, default_flow_style=False).encode("UTF-8"))
+    snippetHash.update(serializedSnippet)
+
+    return snippetHash.digest()
+
+
 def createSignature(unsignedSnippet):
     """
     Function that creates and returns the signature based off of a given private key and filtered yaml.  At the moment the
     private key is stored locally in the repo, however this is bound to change later.
       output: signature (base64)
     """
-    serializedSnippet = yaml.dump(unsignedSnippet)
+    snippetHash = createSnippetHash(unsignedSnippet)
 
-    signature = gpg.sign(serializedSnippet, detach=True, passphrase='something')
+    signature = gpg.sign(snippetHash, detach=True, passphrase='something')
     signature = bytes(str(signature).encode("UTF-8"))
 
     return base64.b64encode(signature)
@@ -58,9 +71,9 @@ def excludeDynamicElements(unsignedSnippet):
             try:
                 del unsignedSnippet[element[0]][element[1]]
             except:
-                raise Exception(f'INVALID FIELD: the variable {element} defined in insights_signature_exclude does not exist.')
+                raise Exception('INVALID FIELD: the variable {0} defined in insights_signature_exclude does not exist.'.format(element))
         else:
-            raise Exception(f'INVALID EXCLUSION: the variable {element} is not a valid exclusion.')
+            raise Exception('INVALID EXCLUSION: the variable {0} is not a valid exclusion.'.format(element))
 
     return unsignedSnippet
 
@@ -109,14 +122,15 @@ def executeValidation(signedSnippet, encodedSignature):
     """
     Function that checks signature againsed stringified filtered snippet
     """
-    serializedSnippet = bytes(yaml.dump(signedSnippet, default_flow_style=False).encode("UTF-8"))
+    snippetHash = createSnippetHash(signedSnippet)
+
     decodedSignature = base64.b64decode(encodedSignature)
 
     fd, fn = tempfile.mkstemp()
     os.write(fd, decodedSignature)
     os.close(fd)
 
-    result = gpg.verify_data(fn, serializedSnippet)
+    result = gpg.verify_data(fn, snippetHash)
     os.unlink(fn)
 
     return result
@@ -152,9 +166,9 @@ def verify(templatePath):
             result = verifyPlaybookSnippet(signedSnippet)
 
             if not result:
-                print(f"Signature could not be verified for template [name: { signedSnippet['name'] }]")
+                print("Signature could not be verified for template [name: {0}]".format(signedSnippet['name']))
             else:
-                print(f"Validation was Successful for template [name: { signedSnippet['name'] }]")
+                print("Validation was Successful for template [name: {0}]".format(signedSnippet['name']))
 
 
 def main():
